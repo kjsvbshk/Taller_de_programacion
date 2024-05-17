@@ -54,7 +54,7 @@ pared4.collider = 'box'
 sala_texture = load_texture('assets/sala.jpg')
 sala_texture = load_texture('assets/sala.jpg')
 door_texture = load_texture('assets/door_texture.jpg')
-
+               
 #crear salas
 sala1 = Entity(model='cube', texture=sala_texture, scale=(30, 10, 30), position=(ground.scale.x / 2 - 15, 5, ground.scale.z / 2 - 15))
 puerta1 = Entity(model='cube', texture=door_texture, scale=(1, 10, 5), position=(ground.scale.x / 2 - 15, 5, ground.scale.z / 2))
