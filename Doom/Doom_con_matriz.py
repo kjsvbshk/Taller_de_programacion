@@ -37,6 +37,38 @@ class mano(Entity):
             position = Vec2(self.x_inicio,self.y_inicio),#posicion x,y
             )
 
+
+#obtener textura almacenada de acuerdo al valor
+def obtener_texturas(altura):
+    return texturas_nivel.get(altura, 'assets/default_texture.jpg')
+
+def crear_mapa(nivel1,nivel2):
+    largo = len(nivel1)
+    ancho = len(nivel1[0])
+    #crear espacio
+    for i in range(largo):
+        piso = nivel1[i]
+        nivel = nivel2[i]
+
+        for j in range(ancho):
+            # Crear el suelo y techo
+            if piso[j] == 0:
+                # Crear suelo
+                Escenario_3D(position=(j,0,i), escala=(1,1), textura='assets/suelo.jpg')
+            # Crear paredes
+            if piso[j] > 0:
+                # Crear pared a la altura correspondiente
+                bloque = Escenario_3D(position=(j,piso[j],i), escala=(1,piso[j]))
+                # Ajustar la textura
+                textura_horizontal_scale = 1 if piso[j] == 1 else 0.5  # Escala horizontal según el nivel de la pared
+                bloque.texture_scale = (textura_horizontal_scale, piso[j])  # Ajustar la escala horizontal y vertical
+            if nivel[j] > 0:
+                # Crear pared a la altura correspondiente
+                bloque = Escenario_3D(position=(j,piso[j]+nivel[j],i), escala=(1,nivel[j]), textura=obtener_texturas(nivel[j]))
+                # Ajustar la textura
+                textura_horizontal_scale = 1 if nivel[j] == 1 else 0.5  # Escala horizontal según el nivel de la pared
+                bloque.texture_scale = (textura_horizontal_scale, nivel[j])  # Ajustar la escala horizontal y vertical
+
 #Definicion de texturas
 texturas_nivel={
     1: 'assets/suelo.jpg',
@@ -46,66 +78,30 @@ texturas_nivel={
     5: 'assets/paredes.jpg',
     6: 'assets/paredes.jpg',
     7: 'assets/paredes.jpg',
-    8: 'assets/paredes.jpg',
+    8: 'assets/sala.jpg',
 }
-#obtener textura almacenada de acuerdo al valor
-def obtener_texturas(altura):
-    return texturas_nivel.get(altura, 'assets/default_texture.jpg')
-
-def crear_suelo_techo(x,z):
-    Escenario_3D(position=(x,8,z),escala=(1,1),textura='assets/suelo.jpg')#suelo
-    # Escenario_3D(position=(x,8,z),escala=(1,1),textura='assets/lava2.jpg') #techo
-def crear_pared(x,y,z,altura):
-    textura = obtener_texturas(altura)
-    Escenario_3D(position=(x,y,z),escala=(1,altura),textura=textura)
-
-
-
-def crear_mapa(nivel1,nivel2):
-    largo = len(nivel1)
-    ancho = len(nivel1[0])
-    #crear espacio
-    for i in range(largo):
-        piso = nivel1[i]
-        nivel = nivel2[i]
-        for j in range(ancho):
-        #crear el suelo y techo
-            if piso[j] == 0:
-                #crear techo 
-                # Escenario_3D(position=(j,8,i),escala=(1,1),textura='assets/lava2.jpg')
-                #crear suelo
-                Escenario_3D(position=(j,0,i),escala=(1,1),textura='assets/suelo.jpg')
-        #crear paredes
-            if piso[j] > 0:
-                #crear pared a la altula correspondiente
-                Escenario_3D(position=(j,piso[j],i),escala=(1,piso[j]))
-            if nivel[j]>0:
-                #crear pared a la altula correspondiente
-                Escenario_3D(position=(j,piso[j]+nivel[j],i),escala=(1,nivel[j]),textura=obtener_texturas(nivel[j]))
-                # if j ==0 or j ==ancho-1 or i ==0 or i==largo-1:
-                #     Escenario_3D(position=(j,piso[j]+nivel[j],i),escala=(1,nivel[i]))
 
 nivel = [
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 5, 5, 5, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 2, 2, 2, 2, 5, 0, 6, 6, 6, 6, 6, 0, 0, 0, 0 ],
-    [0, 0, 0, 4, 4, 4, 4, 4, 0, 0, 5, 2, 2, 2, 2, 5, 0, 6, 3, 3, 3, 6, 0, 0, 0, 0 ],
-    [0, 0, 0, 4, 1, 1, 1, 4, 4, 4, 5, 2, 2, 2, 2, 5, 0, 6, 3, 3, 3, 6, 0, 0, 0, 0 ],
-    [0, 0, 0, 4, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 5, 4, 6, 3, 3, 3, 6, 0, 0, 0, 0 ],
-    [0, 0, 0, 4, 1, 1, 1, 4, 4, 4, 5, 2, 2, 2, 2, 5, 1, 6, 3, 3, 3, 6, 0, 0, 0, 0 ],
-    [0, 4, 4, 4, 1, 1, 1, 4, 4, 4, 4, 4, 2, 2, 4, 4, 4, 4, 6, 3, 6, 5, 5, 5, 5, 5 ],
-    [4, 0, 0, 0, 0, 0, 0, 0, 4, 1, 1, 1, 1, 1, 1, 1, 1, 4, 2, 2, 2, 2, 2, 2, 2, 5 ],
-    [4, 0, 0, 0, 0, 0, 0, 0, 4, 1, 1, 1, 1, 1, 1, 1, 1, 4, 2, 2, 2, 2, 2, 2, 2, 5 ],
-    [4, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 5 ],
-    [4, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 5 ],
-    [4, 0, 0, 0, 0, 0, 0, 0, 4, 1, 1, 1, 1, 1, 1, 1, 1, 4, 2, 2, 2, 2, 2, 2, 2, 5 ],
-    [4, 0, 0, 0, 0, 0, 0, 0, 4, 1, 1, 1, 1, 1, 1, 1, 1, 4, 2, 2, 2, 2, 2, 2, 2, 5 ],
-    [0, 4, 4, 4, 1, 1, 1, 4, 4, 4, 4, 4, 1, 1, 4, 4, 4, 5, 5, 2, 5, 5, 5, 5, 5, 5 ],
-    [0, 0, 0, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 5, 0, 0, 0, 0 ],
-    [0, 0, 0, 4, 1, 1, 1, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 2, 2, 2, 5, 0, 0, 0, 0 ],
-    [0, 0, 0, 4, 1, 1, 1, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 2, 2, 2, 5, 0, 0, 0, 0 ],
-    [0, 0, 0, 4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 2, 2, 2, 5, 0, 0, 0, 0 ],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 5, 5, 5, 0, 0, 0, 0 ],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ]
+    [8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8 ],
+    [8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 2, 2, 2, 2, 5, 0, 6, 6, 6, 6, 6, 0, 0, 0, 8 ],
+    [8, 0, 0, 4, 4, 4, 4, 4, 0, 0, 5, 2, 2, 2, 2, 5, 0, 6, 3, 3, 3, 6, 0, 0, 0, 8 ],
+    [8, 0, 0, 4, 1, 1, 1, 4, 4, 4, 5, 2, 2, 2, 2, 5, 0, 6, 3, 3, 3, 6, 0, 0, 0, 8 ],
+    [8, 0, 0, 4, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 5, 4, 6, 3, 3, 3, 6, 0, 0, 0, 8 ],
+    [8, 0, 0, 4, 1, 1, 1, 4, 4, 4, 5, 2, 2, 2, 2, 5, 1, 6, 3, 3, 3, 6, 0, 0, 0, 8 ],
+    [8, 4, 4, 4, 1, 1, 1, 4, 4, 4, 4, 4, 2, 2, 4, 4, 4, 4, 6, 3, 6, 5, 5, 5, 5, 8 ],
+    [8, 0, 0, 0, 0, 0, 0, 0, 4, 1, 1, 1, 1, 1, 1, 1, 1, 4, 2, 2, 2, 2, 2, 2, 2, 8 ],
+    [8, 0, 0, 0, 0, 0, 0, 0, 4, 1, 1, 1, 1, 1, 1, 1, 1, 4, 2, 2, 2, 2, 2, 2, 2, 8 ],
+    [8, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 8 ],
+    [8, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 8 ],
+    [8, 0, 0, 0, 0, 0, 0, 0, 4, 1, 1, 1, 1, 1, 1, 1, 1, 4, 2, 2, 2, 2, 2, 2, 2, 8 ],
+    [8, 0, 0, 0, 0, 0, 0, 0, 4, 1, 1, 1, 1, 1, 1, 1, 1, 4, 2, 2, 2, 2, 2, 2, 2, 8 ],
+    [8, 4, 4, 4, 1, 1, 1, 4, 4, 4, 4, 4, 1, 1, 4, 4, 4, 5, 5, 2, 5, 5, 5, 5, 5, 8 ],
+    [8, 0, 0, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 5, 0, 0, 0, 8 ],
+    [8, 0, 0, 4, 1, 1, 1, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 2, 2, 2, 5, 0, 0, 0, 8 ],
+    [8, 0, 0, 4, 1, 1, 1, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 2, 2, 2, 5, 0, 0, 0, 8 ],
+    [8, 0, 0, 4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 2, 2, 2, 5, 0, 0, 0, 8 ],
+    [8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 5, 5, 5, 0, 0, 0, 8 ],
+    [8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8 ]
 ]
 
 techo = [
