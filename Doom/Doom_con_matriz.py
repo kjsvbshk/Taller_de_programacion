@@ -3,9 +3,10 @@ from ursina.prefabs.first_person_controller import FirstPersonController
 
 app= Ursina()
 jugador = FirstPersonController(position=(5,0,10))
+sky = Sky(texture='assets/sky.jpg')
 
 class Escenario_3D(Button):
-    def __init__(self,position=(0,0,0),escala=(10,10),textura='white_cube'):
+    def __init__(self,position=(0,0,0),escala=(0,0),textura='white_cube'):
         super().__init__(
             position = position,
             parent = scene,
@@ -23,8 +24,8 @@ class mano(Entity):
     y_inicio = -0.4
     image_speed = 0.4
     image_index = 0#imagen estatica
+    textura_mano = Texture('assets/gun.png')
 
-    textura_mano = Texture('assets/arma.png')
     def __init__(self):
         super().__init__(            
             parent = camera.ui,
@@ -36,7 +37,54 @@ class mano(Entity):
             position = Vec2(self.x_inicio,self.y_inicio),#posicion x,y
             )
 
-        
+#Definicion de texturas
+texturas_nivel={
+    1: 'assets/suelo.jpg',
+    2: 'assets/suelo.jpg',
+    3: 'assets/paredes.jpg',
+    4: 'assets/paredes.jpg',
+    5: 'assets/paredes.jpg',
+    6: 'assets/paredes.jpg',
+    7: 'assets/paredes.jpg',
+    8: 'assets/paredes.jpg',
+}
+#obtener textura almacenada de acuerdo al valor
+def obtener_texturas(altura):
+    return texturas_nivel.get(altura, 'assets/default_texture.jpg')
+
+def crear_suelo_techo(x,z):
+    Escenario_3D(position=(x,8,z),escala=(1,1),textura='assets/suelo.jpg')#suelo
+    # Escenario_3D(position=(x,8,z),escala=(1,1),textura='assets/lava2.jpg') #techo
+def crear_pared(x,y,z,altura):
+    textura = obtener_texturas(altura)
+    Escenario_3D(position=(x,y,z),escala=(1,altura),textura=textura)
+
+
+
+def crear_mapa(nivel1,nivel2):
+    largo = len(nivel1)
+    ancho = len(nivel1[0])
+    #crear espacio
+    for i in range(largo):
+        piso = nivel1[i]
+        nivel = nivel2[i]
+        for j in range(ancho):
+        #crear el suelo y techo
+            if piso[j] == 0:
+                #crear techo 
+                # Escenario_3D(position=(j,8,i),escala=(1,1),textura='assets/lava2.jpg')
+                #crear suelo
+                Escenario_3D(position=(j,0,i),escala=(1,1),textura='assets/suelo.jpg')
+        #crear paredes
+            if piso[j] > 0:
+                #crear pared a la altula correspondiente
+                Escenario_3D(position=(j,piso[j],i),escala=(1,piso[j]))
+            if nivel[j]>0:
+                #crear pared a la altula correspondiente
+                Escenario_3D(position=(j,piso[j]+nivel[j],i),escala=(1,nivel[j]),textura=obtener_texturas(nivel[j]))
+                # if j ==0 or j ==ancho-1 or i ==0 or i==largo-1:
+                #     Escenario_3D(position=(j,piso[j]+nivel[j],i),escala=(1,nivel[i]))
+
 nivel = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 5, 5, 5, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 2, 2, 2, 2, 5, 0, 6, 6, 6, 6, 6, 0, 0, 0, 0 ],
@@ -82,30 +130,6 @@ techo = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ]
 ]
-
-def crear_mapa(nivel1,nivel2):
-    largo = len(nivel1)
-    ancho = len(nivel1[0])
-    #crear espacio
-    for i in range(largo):
-        piso = nivel1[i]
-        nivel = nivel2[i]
-        for j in range(ancho):
-        #crear el suelo y techo
-            if piso[j] == 0:
-                #crear techo 
-                Escenario_3D(position=(j,8,i),escala=(1,1),textura='assets/lava2.jpg')
-                #crear suelo
-                Escenario_3D(position=(j,0,i),escala=(1,1),textura='assets/suelo2.jpg')
-        #crear paredes
-            if piso[j] > 0:
-                #crear pared a la altula correspondiente
-                Escenario_3D(position=(j,piso[j],i),escala=(1,piso[j]))
-            if nivel[j]>0:
-                #crear pared a la altula correspondiente
-                Escenario_3D(position=(j,piso[j]+nivel[j],i),escala=(1,nivel[j]),textura='sala.jpg')
-                # if j ==0 or j ==ancho-1 or i ==0 or i==largo-1:
-                #     Escenario_3D(position=(j,piso[j]+nivel[j],i),escala=(1,nivel[i]))
 
 crear_mapa(techo,nivel)
 arma = mano()
