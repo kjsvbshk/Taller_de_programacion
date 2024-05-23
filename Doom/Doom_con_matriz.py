@@ -54,53 +54,53 @@ def crear_mapa(nivel1,nivel2):
             # Crear el suelo y techo
             if piso[j] == 0:
                 # Crear suelo
-                Escenario_3D(position=(j,0,i), escala=(1,1), textura='assets/suelo.jpg')
+                Escenario_3D(position=(j,0,i), escala=(1,1), textura='assets/suelo3.png')
             # Crear paredes
             if piso[j] > 0:
                 # Crear pared a la altura correspondiente
                 bloque = Escenario_3D(position=(j,piso[j],i), escala=(1,piso[j]))
                 # Ajustar la textura
-                textura_horizontal_scale = 1 if piso[j] == 1 else 0.5  # Escala horizontal según el nivel de la pared
+                textura_horizontal_scale = 10 if piso[j] == 1 else 9  # Escala horizontal según el nivel de la pared
                 bloque.texture_scale = (textura_horizontal_scale, piso[j])  # Ajustar la escala horizontal y vertical
             if nivel[j] > 0:
                 # Crear pared a la altura correspondiente
                 bloque = Escenario_3D(position=(j,piso[j]+nivel[j],i), escala=(1,nivel[j]), textura=obtener_texturas(nivel[j]))
                 # Ajustar la textura
-                textura_horizontal_scale = 1 if nivel[j] == 1 else 0.5  # Escala horizontal según el nivel de la pared
+                textura_horizontal_scale = 2 if nivel[j] == 1 else 1  # Escala horizontal según el nivel de la pared
                 bloque.texture_scale = (textura_horizontal_scale, nivel[j])  # Ajustar la escala horizontal y vertical
 
 #Definicion de texturas
 texturas_nivel={
-    1: 'assets/suelo.jpg',
-    2: 'assets/suelo.jpg',
-    3: 'assets/paredes.jpg',
-    4: 'assets/paredes.jpg',
-    5: 'assets/paredes.jpg',
-    6: 'assets/paredes.jpg',
-    7: 'assets/paredes.jpg',
-    8: 'assets/sala.jpg',
+    1: 'assets/suelo2.jpg',
+    2: 'assets/suelo2.jpg',
+    3: 'assets/suelo2.jpg',
+    4: 'assets/paredes2.jpg',
+    5: 'assets/paredes2.jpg',
+    6: 'assets/paredes2.jpg',
+    7: 'assets/paredes2.jpg',
+    8: 'assets/pared3.jpg',
 }
 
 nivel = [
     [8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8 ],
-    [8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 2, 2, 2, 2, 5, 0, 6, 6, 6, 6, 6, 0, 0, 0, 8 ],
-    [8, 0, 0, 4, 4, 4, 4, 4, 0, 0, 5, 2, 2, 2, 2, 5, 0, 6, 3, 3, 3, 6, 0, 0, 0, 8 ],
-    [8, 0, 0, 4, 1, 1, 1, 4, 4, 4, 5, 2, 2, 2, 2, 5, 0, 6, 3, 3, 3, 6, 0, 0, 0, 8 ],
-    [8, 0, 0, 4, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 5, 4, 6, 3, 3, 3, 6, 0, 0, 0, 8 ],
-    [8, 0, 0, 4, 1, 1, 1, 4, 4, 4, 5, 2, 2, 2, 2, 5, 1, 6, 3, 3, 3, 6, 0, 0, 0, 8 ],
-    [8, 4, 4, 4, 1, 1, 1, 4, 4, 4, 4, 4, 2, 2, 4, 4, 4, 4, 6, 3, 6, 5, 5, 5, 5, 8 ],
-    [8, 0, 0, 0, 0, 0, 0, 0, 4, 1, 1, 1, 1, 1, 1, 1, 1, 4, 2, 2, 2, 2, 2, 2, 2, 8 ],
-    [8, 0, 0, 0, 0, 0, 0, 0, 4, 1, 1, 1, 1, 1, 1, 1, 1, 4, 2, 2, 2, 2, 2, 2, 2, 8 ],
+    [8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 2, 2, 2, 2, 7, 0, 7, 7, 7, 7, 7, 0, 0, 0, 8 ],
+    [8, 0, 0, 7, 7, 7, 7, 7, 0, 0, 7, 2, 2, 2, 2, 7, 0, 7, 3, 3, 3, 7, 0, 0, 0, 8 ],
+    [8, 0, 0, 7, 1, 1, 1, 7, 7, 7, 7, 2, 2, 2, 2, 7, 0, 7, 3, 3, 3, 7, 0, 0, 0, 8 ],
+    [8, 0, 0, 7, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 7, 7, 7, 3, 3, 3, 7, 0, 0, 0, 8 ],
+    [8, 0, 0, 7, 1, 1, 1, 7, 7, 7, 7, 2, 2, 2, 2, 7, 1, 7, 3, 3, 3, 7, 0, 0, 0, 8 ],
+    [8, 7, 7, 7, 1, 1, 1, 7, 7, 7, 7, 7, 2, 2, 7, 7, 7, 7, 7, 3, 7, 7, 7, 7, 7, 8 ],
+    [8, 0, 0, 0, 0, 0, 0, 0, 7, 1, 1, 1, 1, 1, 1, 1, 1, 7, 2, 2, 2, 2, 2, 2, 2, 8 ],
+    [8, 0, 0, 0, 0, 0, 0, 0, 7, 1, 1, 1, 1, 1, 1, 1, 1, 7, 2, 2, 2, 2, 2, 2, 2, 8 ],
     [8, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 8 ],
     [8, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 8 ],
-    [8, 0, 0, 0, 0, 0, 0, 0, 4, 1, 1, 1, 1, 1, 1, 1, 1, 4, 2, 2, 2, 2, 2, 2, 2, 8 ],
-    [8, 0, 0, 0, 0, 0, 0, 0, 4, 1, 1, 1, 1, 1, 1, 1, 1, 4, 2, 2, 2, 2, 2, 2, 2, 8 ],
-    [8, 4, 4, 4, 1, 1, 1, 4, 4, 4, 4, 4, 1, 1, 4, 4, 4, 5, 5, 2, 5, 5, 5, 5, 5, 8 ],
-    [8, 0, 0, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 5, 0, 0, 0, 8 ],
-    [8, 0, 0, 4, 1, 1, 1, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 2, 2, 2, 5, 0, 0, 0, 8 ],
-    [8, 0, 0, 4, 1, 1, 1, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 2, 2, 2, 5, 0, 0, 0, 8 ],
-    [8, 0, 0, 4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 2, 2, 2, 5, 0, 0, 0, 8 ],
-    [8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 5, 5, 5, 0, 0, 0, 8 ],
+    [8, 0, 0, 0, 0, 0, 0, 0, 7, 1, 1, 1, 1, 1, 1, 1, 1, 7, 2, 2, 2, 2, 2, 2, 2, 8 ],
+    [8, 0, 0, 0, 0, 0, 0, 0, 7, 1, 1, 1, 1, 1, 1, 1, 1, 7, 2, 2, 2, 2, 2, 2, 2, 8 ],
+    [8, 7, 7, 7, 1, 1, 1, 7, 7, 7, 7, 7, 1, 1, 7, 7, 7, 7, 7, 2, 7, 7, 7, 7, 7, 8 ],
+    [8, 0, 0, 7, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 7, 0, 0, 0, 8 ],
+    [8, 0, 0, 7, 1, 1, 1, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 2, 2, 2, 7, 0, 0, 0, 8 ],
+    [8, 0, 0, 7, 1, 1, 1, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 2, 2, 2, 7, 0, 0, 0, 8 ],
+    [8, 0, 0, 7, 7, 7, 7, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 2, 2, 2, 7, 0, 0, 0, 8 ],
+    [8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 7, 7, 7, 7, 0, 0, 0, 8 ],
     [8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8 ]
 ]
 
