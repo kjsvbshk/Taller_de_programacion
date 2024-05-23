@@ -5,6 +5,7 @@ app= Ursina()
 jugador = FirstPersonController(position=(5,0,10))
 sky = Sky(texture='assets/sky.jpg')
 
+
 class Escenario_3D(Button):
     def __init__(self,position=(0,0,0),escala=(0,0),textura='white_cube'):
         super().__init__(
