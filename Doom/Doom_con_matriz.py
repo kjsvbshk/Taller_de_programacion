@@ -42,7 +42,6 @@ class mano(Entity):
 #obtener textura almacenada de acuerdo al valor
 def obtener_texturas(altura):
     return texturas_nivel.get(altura, 'assets/default_texture.jpg')
-
 def crear_mapa(nivel1,nivel2):
     largo = len(nivel1)
     ancho = len(nivel1[0])
