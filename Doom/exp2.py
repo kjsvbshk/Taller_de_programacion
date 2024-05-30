@@ -4,7 +4,6 @@ from ursina.prefabs.first_person_controller import FirstPersonController
 app = Ursina()
 jugador = FirstPersonController(position=(5, 0, 10))
 sky = Sky(texture='assets/sky.jpg')
-disparo_sonido = Audio('assets/9mm-pistol-shot-6349.mp3', autoplay=False)
 
 class Escenario_3D(Button):
     def __init__(self, position=(0, 0, 0), escala=(0, 0), textura='white_cube'):
@@ -20,69 +19,39 @@ class Escenario_3D(Button):
         )
 
 class Mano(Entity):
-    xInicio = 0  # Posición del arma en el eje X
-    yInicio = -0.4  # Posición del arma en el eje Y
-    image_speed = 0.4
-    image_index = 0  # Imagen fija
-    textura_mano = load_texture('assets/arma.png')
-    textura_disparo = load_texture('assets/arma_disparo.png')
-    texturas_recarga = [
-        load_texture("assets/Paso1.png"),
-        load_texture("assets/Paso2.png"),
-        load_texture("assets/Paso3.png"),
-        load_texture("assets/Paso4.png"),
-        load_texture("assets/Paso5.png"),
-        load_texture("assets/Paso1.png"),
-    ]
+    x_inicio = 0
+    y_inicio = -0.4
+    image_speed = 4  # Ajusta esta variable para cambiar la velocidad de los frames
+    image_index = 0
+    textura_mano = Texture('assets/sprite_shot.png')
 
     def __init__(self):
         super().__init__(
             parent=camera.ui,
-            model='cube',
+            model='quad',
             texture=self.textura_mano,
-            scale=0.4,
+            scale=(0.4, 0.4),  # Escala ajustada
             color=color.white,
-            rotation=Vec3(0, 0, 0),  # girar el arma
-            position=Vec2(self.xInicio, self.yInicio)
+            rotation=Vec3(0, 0, 0),
+            position=Vec2(self.x_inicio, self.y_inicio),
         )
+        self.frames = [Vec4(0, 0, 0.3 + i*0.2, 0.28) for i in range(10)] + [Vec4(0 + i*0.2, 0.25, 0.3 + i*0.2, 0.5) for i in range(9)]
+        self.texture_scale = Vec2(1, 1)
+        self.active = False
 
-    def disparar(self):
-        # Cambiar la textura al disparar
-        self.texture = self.textura_disparo
-        disparo_sonido.play()  # Reproducir sonido de disparo
-        # Restaurar textura después de 0.5 segundos
-        invoke(self.restaurar_textura, delay=0.5)
-
-    def recargar(self):
-        for i, textura in enumerate(self.texturas_recarga):
-            invoke(self.cambiar_textura, textura, delay=i * 0.1)
-
-    def cambiar_textura(self, textura):
-        self.texture = textura
-
-    def restaurar_textura(self):
-        self.texture = self.textura_mano
-
-class Proyectil(Entity):
-    def __init__(self, position=(0, 0, 0), direction=(0, 0, 0)):
-        super().__init__(
-            parent=scene,
-            position=position,
-            model='sphere',
-            scale=0.2,
-            color=color.red,
-            collider='sphere'
-        )
-        self.direction = direction
+    def on_click(self):
+        self.active = True
 
     def update(self):
-        self.position += self.direction * time.dt * 20  # Aumentar la velocidad del proyectil
-
-        # Verificar colisión
-        hit_info = self.intersects()
-        if hit_info.hit:
-            # Destruir el proyectil al colisionar
-            destroy(self)
+        if self.active:
+            self.image_index = (self.image_index + time.dt * self.image_speed) % len(self.frames)
+            current_frame = self.frames[int(self.image_index)]
+            self.texture_offset = Vec2(current_frame.x, current_frame.y)
+            self.texture_scale = Vec2(current_frame.z - current_frame.x, current_frame.w - current_frame.y)
+            self.scale = Vec3(self.texture_scale.x*1,self.texture_scale.y*1,1)  # Ajusta la escala para que coincida con el tamaño del frame
+            if int(self.image_index) == len(self.frames) - 1:
+                self.active = False
+                self.image_index = 0
 
 # Obtener textura almacenada de acuerdo al valor
 def obtener_texturas(altura):
@@ -168,12 +137,10 @@ techo = [
 crear_mapa(techo,nivel)
 
 mano = Mano()
+mano.on_click = mano.on_click  # Asigna la función de clic
 
 def input(key):
     if key == 'left mouse down':
-        mano.disparar()
-        proyectil = Proyectil(position=jugador.position + (0, 1, 0), direction=camera.forward)
-    if key == 'r':
-        mano.recargar()
+        mano.on_click()
 
 app.run()
